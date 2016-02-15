@@ -1,6 +1,5 @@
-# KnockoutJsBubbleTea (2013)
-A small sample code made in 2013 using C# and KnockoutJS
-
+# KnockoutJs BubbleTea (2013)
+A small sample code made C# and KnockoutJS during a 2 hour code challenge in 2013
 
 Further possible improvements
             
