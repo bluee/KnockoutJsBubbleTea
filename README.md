@@ -12,3 +12,5 @@ Further possible improvements
    - Unit testing
    - Use real database
    - Improve load performance of products data (compression, combine AJAX JSON requests)
+
+![Alt text](Screenshot1.png?raw=true "Version 0.1")
