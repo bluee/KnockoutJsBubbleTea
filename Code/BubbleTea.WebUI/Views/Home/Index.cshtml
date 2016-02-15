@@ -1,0 +1,149 @@
+﻿@{
+    ViewBag.Title = "Shopping cart";
+}
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            //Init knockoutjs model and bindings
+            CartNamespace.init();
+        });
+    </script>
+}
+<div class="row">
+    <div class="col-md-12">
+        <br/>
+
+        @*
+            List available products
+        *@
+        <div class="row" data-bind="foreach:products">
+
+            <div class="col-md-4 thumbnail">
+                <div class="media">
+                    <a class="pull-left">
+                        <img style="width: 150px; height:auto" class="media-object" alt="Tea" data-bind="attr: { src : '/Images/tea'+$data.Id()+'.png' }">
+                    </a>
+                    <div class="media-body">
+                        <h4 data-bind="text:$data.Name"></h4>
+                        <p>A$ <span data-bind="text:$data.Price()"></span></p>
+                        <select class="form-control" data-bind='options: $root.flavorList, optionsText: "Name", optionsValue: "Id", optionsCaption: "Select flavor", value: flavor'> </select>
+                    </div>
+                </div>
+
+                @*
+                    Toppings can either be selected as a select multiple or checkbox
+                    <select class="form-control" data-bind='options: ToppingList, optionsText: "name", optionsValue: "id", optionsCaption: "Select toping", selectedOptions: toppings' multiple> </select>
+                *@
+
+                <br />
+                <div class="row">
+                    <div class="col-md-3"><span class="label label-success">Toppings</span></div>
+                    <div class="col-md-9">
+                        <ul class="list-inline" data-bind="foreach: $root.toppingList">
+                            <li>
+                                <input type="checkbox" data-bind="attr: { value: Id }, checked: $parent.toppings">&nbsp;<span data-bind="text: Name"></span>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+                
+                
+
+                <a data-bind="click: $parent.addToCart" href="#" class="btn btn-xs btn-primary">Add to cart</a>
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+    <div class="col-md-12">
+
+        <h4>Shopping cart</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1">Qty#</th>
+                            <th class="col-md-1">Size</th>
+                            <th>Description</th>
+                            <th>Toppings</th>
+                            <th class="col-md-2 text-right">A$</th>
+                            <th class="col-md-2"></th>
+                        </tr>
+                    </thead>
+
+                    @*List all items in lines *@
+                    <tbody data-bind="foreach:lines">
+                        <tr>
+                            <td>
+                                <input style="width:30px" data-bind="value:$data.quantity" />
+                            </td>
+                            <td>
+                                <select data-bind='options: $root.sizeList, optionsText: "Name", optionsValue: "Id", value: $data.size' style="width:50px"></select>
+                            </td>
+                            <td>
+                                <span data-bind="text:$data.product().Name"></span>&nbsp;
+                            </td>
+                            <td>
+                                (<span data-bind="text:$data.toppings().length"></span>) toppings
+                            </td>
+                            <td class="text-right">
+                                $<span data-bind="text:$data.cost()"></span>
+                            </td>
+                            <td>
+                                <a href="#" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#EditItemModal">Edit</a>
+                                <a href="#" class="btn btn-xs btn-danger" data-bind="click:$parent.removeFromCart">Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        @*
+            Display Subtotal, shipping cost, grand total
+        *@
+
+        <div class="row">
+            <div class="col-md-offset-7 col-md-5">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td><strong>Subtotal</strong></td>
+                            <td style="text-align:right">
+                                $<span data-bind="text:subtotal()"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Shipping cost</strong></td>
+                            <td style="text-align:right">
+                                $<span data-bind="text:ShippingTotal()"></span>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td style="text-align:right">
+                                <strong>$<span data-bind="text:grandTotal()"></span></strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-offset-7 col-md-5">
+                <button class="btn btn-primary pull-right" data-bind='click: submit'>Submit order</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("_EditItemModal")
